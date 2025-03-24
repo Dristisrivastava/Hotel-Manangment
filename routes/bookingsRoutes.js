@@ -4,7 +4,6 @@ const Booking = require("../models/booking");
 const Room = require("../models/room");
 const stripe = require("stripe")("sk_test_51R45PyBMbwUDnFnLCO2L6HN1F8XPGSHA5ZC2mNfifJv35Lm9mUk73WQT7luKxuoaH30nHIvXhObolKHiLnKrEqBd00nC0xEAyI");
 
-// Create Payment Intent (For Frontend)
 router.post("/create-payment-intent", async (req, res) => {
     const { totalamount } = req.body;
 
@@ -21,7 +20,6 @@ router.post("/create-payment-intent", async (req, res) => {
     }
 });
 
-// Handle Booking & Save to Database
 router.post("/bookroom", async (req, res) => {
     const { room, userid, fromdate, todate, totalamount, totaldays, transactionId } = req.body;
 
@@ -87,4 +85,18 @@ router.post("/cancelbooking", async(req, res) => {
 return res.status(400).json({ error});
 }
 });
+router.get("/getallbookings", async(req, res) => {
+
+    try {
+    
+    const bookings= await Booking.find()
+    
+    res.send(bookings)
+    
+    } catch (error) {
+    
+    return res.status(400).json({ error });
+    
+    }
+    });
 module.exports = router;

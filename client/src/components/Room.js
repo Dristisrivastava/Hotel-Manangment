@@ -48,7 +48,12 @@ function Room({ room, fromdate, todate }) {
           <Modal.Title>{room.name}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <img src={room.imageurls[0]} className="modal-img" alt="Room" />
+          {/* Show second image if available, otherwise show first image */}
+          <img 
+            src={room.imageurls[1] ? room.imageurls[1] : room.imageurls[0]} 
+            className="modal-img" 
+            alt="Room" 
+          />
           <p>{room.description}</p>
         </Modal.Body>
         <Modal.Footer>

@@ -1,68 +1,41 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 function Navbar() {
-  // ✅ Safe parsing of localStorage data
-  const user = localStorage.getItem("currentUser") ? JSON.parse(localStorage.getItem("currentUser")) : null;
+  const [user, setUser] = useState(null);
+
+  // Fetch user from localStorage when the component mounts
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem("currentUser"));
+    setUser(storedUser);
+  }, []);
 
   function logout() {
     localStorage.removeItem("currentUser");
-    window.location.href = "/login"; // Redirect to login after logout
+    setUser(null); // Update state to reflect logout
+    window.location.href = "/login"; // Redirect to login page
   }
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-      <a className="navbar-brand" href="/">
-        HotelBooking
-      </a>
-      <button
-        className="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#navbarNav"
-        aria-controls="navbarNav"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span className="navbar-toggler-icon"></span>
-      </button>
-      <div className="collapse navbar-collapse" id="navbarNav">
-        <ul className="navbar-nav ml-auto">
-          {user ? (
-            <li className="nav-item dropdown">
-              <button
-                className="btn btn-secondary dropdown-toggle"
-                type="button"
-                id="dropdownMenuButton"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                {user.name}
-              </button>
-              <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a className="dropdown-item" href="/profile">
-                  Profile
-                </a>
-                <a className="dropdown-item" href="#" onClick={logout}>
-                  Logout
-                </a>
-              </div>
-            </li>
-          ) : (
-            <>
-              <li className="nav-item">
-                <a className="nav-link" href="/register">
-                  Register
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="/login">
-                  Login
-                </a>
-              </li>
-            </>
-          )}
-        </ul>
+    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+      <Link className="navbar-brand" to="/">Elite Stays</Link>
+      <div className="ml-auto">
+        {user ? (
+          <div className="dropdown">
+            <button className="btn btn-secondary dropdown-toggle" type="button" id="userMenu" data-toggle="dropdown">
+              {user.name}
+            </button>
+            <div className="dropdown-menu">
+              <Link className="dropdown-item" to="/profile">Profile</Link>
+              <button className="dropdown-item" onClick={logout}>Logout</button>
+            </div>
+          </div>
+        ) : (
+          <>
+            <Link className="btn btn-secondary m-1" to="/login">Login</Link>
+            <Link className="btn btn-secondary m-1" to="/register">Register</Link>
+          </>
+        )}
       </div>
     </nav>
   );
